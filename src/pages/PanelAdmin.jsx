@@ -33,6 +33,10 @@ export default function AdminPanel() {
   const [cuerpo, setCuerpo] = useState('');
   const [autor, setAutor] = useState('');
   const [fuente, setFuente] = useState('');
+
+  // === ESTADOS DE MENSAJES DE CONTACTO ===
+  const [mensajes, setMensajes] = useState([]);
+  const [cargandoMensajes, setCargandoMensajes] = useState(false);
   
   // === IMÁGENES ===
   const [imagenPrincipal, setImagenPrincipal] = useState('');
@@ -73,6 +77,40 @@ export default function AdminPanel() {
     setHoraPublicacion(now.toTimeString().slice(0, 5));
   }, []);
 
+
+  const cargarMensajes = async () => {
+    setCargandoMensajes(true);
+    try {
+      const q = query(collection(db, 'mensajes'), orderBy('fecha', 'desc'));
+      const querySnapshot = await getDocs(q);
+      setMensajes(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    } catch (error) {
+      console.error("Error cargando mensajes:", error);
+    } finally {
+      setCargandoMensajes(false);
+    }
+  };
+
+  // === MARCAR COMO LEÍDO ===
+  const marcarMensajeLeido = async (id, estadoActual) => {
+    try {
+      await updateDoc(doc(db, 'mensajes', id), { leido: !estadoActual });
+      setMensajes(mensajes.map(m => m.id === id ? { ...m, leido: !estadoActual } : m));
+    } catch (error) {
+      console.error("Error al marcar leído:", error);
+    }
+  };
+
+  // === ELIMINAR MENSAJE ===
+  const eliminarMensaje = async (id) => {
+    if(!confirm('¿Borrar este mensaje para siempre?')) return;
+    try {
+      await deleteDoc(doc(db, 'mensajes', id));
+      setMensajes(mensajes.filter(m => m.id !== id));
+    } catch (error) {
+      console.error("Error eliminando mensaje:", error);
+    }
+  };
   // === CARGAR NOTICIAS ===
   const cargarNoticias = async () => {
     setCargando(true);
@@ -435,6 +473,65 @@ export default function AdminPanel() {
               </div>
             </div>
           </div>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-4 bg-slate-900 text-white flex justify-between items-center">
+                <h2 className="font-bold text-lg">Bandeja de Mensajes</h2>
+                <button onClick={cargarMensajes} className="text-sm bg-slate-800 px-3 py-2 rounded hover:bg-slate-700 transition-colors">
+                  🔄 Actualizar
+                </button>
+              </div>
+
+              {cargandoMensajes ? (
+                <div className="p-10 text-center text-gray-500">Cargando mensajes...</div>
+              ) : mensajes.length === 0 ? (
+                <div className="p-12 text-center text-gray-500">
+                  <span className="text-4xl block mb-2">📭</span>
+                  No tenés ningún mensaje nuevo.
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-200">
+                  {mensajes.map(m => (
+                    <div key={m.id} className={`p-6 transition-colors ${m.leido ? 'bg-white' : 'bg-orange-50/50'}`}>
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center gap-3">
+                          {!m.leido && <span className="w-3 h-3 bg-orange-600 rounded-full shadow-sm"></span>}
+                          <h3 className={`text-lg text-slate-900 ${m.leido ? 'font-medium' : 'font-bold'}`}>{m.asunto}</h3>
+                        </div>
+                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded font-medium">
+                          {/* Asume que tenés tu función formatearFecha a mano */}
+                          {m.fecha ? formatearFecha(m.fecha) : 'Sin fecha'}
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-4 pl-6">
+                        <span className="font-bold">{m.nombre}</span>
+                        <span>•</span>
+                        <a href={`mailto:${m.email}`} className="text-blue-600 hover:underline">{m.email}</a>
+                      </div>
+
+                      <div className="bg-gray-50 p-4 rounded-lg text-gray-800 text-sm whitespace-pre-wrap border border-gray-200 ml-6">
+                        {m.mensaje}
+                      </div>
+
+                      <div className="mt-4 flex gap-2 justify-end">
+                        <button 
+                          onClick={() => marcarMensajeLeido(m.id, m.leido)}
+                          className={`px-4 py-2 text-sm font-medium border rounded-lg transition-colors ${m.leido ? 'text-gray-600 hover:bg-gray-100' : 'bg-orange-100 text-orange-800 hover:bg-orange-200 border-orange-200'}`}
+                        >
+                          {m.leido ? 'Marcar como no leído' : 'Marcar como leído'}
+                        </button>
+                        <button 
+                          onClick={() => eliminarMensaje(m.id)}
+                          className="px-4 py-2 text-sm font-medium bg-white text-red-600 border border-red-200 rounded-lg hover:bg-red-50"
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
           {/* TABLA DE NOTICIAS */}
           {cargando ? (
@@ -470,7 +567,10 @@ export default function AdminPanel() {
                 </button>
               )}
             </div>
+            
+            
           ) : (
+            
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -485,6 +585,8 @@ export default function AdminPanel() {
                       <th className="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase">Acciones</th>
                     </tr>
                   </thead>
+
+                  
                   <tbody className="divide-y divide-gray-200">
                     {noticiasFiltradas.map((noticia) => (
                       <tr key={noticia.id} className="hover:bg-gray-50 transition-colors">
@@ -584,6 +686,8 @@ export default function AdminPanel() {
       </div>
     );
   }
+
+  
 
   // === VISTA: CREAR / EDITAR NOTICIA ===
   return (
@@ -1093,6 +1197,8 @@ export default function AdminPanel() {
               </div>
             </div>
           )}
+
+          
 
           {/* === BOTONES === */}
           <div className="p-6 border-t border-gray-200 bg-gray-50 rounded-b-lg">

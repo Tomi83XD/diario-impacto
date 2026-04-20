@@ -5,6 +5,10 @@ import Home from './pages/Home';
 import DetalleNoticia from './pages/DetalleNoticia';
 import Login from './pages/Login';
 import PanelAdmin from './pages/PanelAdmin';
+import Contacto from './pages/Contacto';
+
+// Importamos el "patovica" que armaste
+import RutaProtegida from './components/RutaProtegida'; 
 
 function App() {
   return (
@@ -21,10 +25,21 @@ function App() {
             {/* Rutas Públicas */}
             <Route path="/" element={<Home />} />
             <Route path="/noticia/:id" element={<DetalleNoticia />} />
+            <Route path="/contacto" element={<Contacto />} />
+            
+            {/* Rutas de Autenticación */}
+            <Route path="/login" element={<Login />} />
             
             {/* Rutas Privadas / Administrativas */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<PanelAdmin />} />
+            {/* Envolvemos PanelAdmin con RutaProtegida */}
+            <Route 
+              path="/admin" 
+              element={
+                <RutaProtegida>
+                  <PanelAdmin />
+                </RutaProtegida>
+              } 
+            />
           </Routes>
         </main>
 

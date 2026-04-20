@@ -14,18 +14,33 @@ export default function Footer() {
             Impacto nace en Punilla para informar con compromiso y verdad. Buscamos conectar y fortalecer lo local, provincial y nacional.
           </p>
           <div className="flex gap-4">
-            {/* LINK A TU INSTAGRAM */}
+            
+            {/* LINK A TU INSTAGRAM CON ICONO SVG */}
             <a 
               href="https://www.instagram.com/diarioelimpacto" 
               target="_blank" 
               rel="noopener noreferrer"
+              aria-label="Instagram de Diario Impacto"
               className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-orange-600 transition-all group"
             >
-              <span className="text-white font-bold group-hover:scale-110">IG</span>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="20" 
+                height="20" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className="text-white group-hover:scale-110 transition-transform"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
             </a>
-            <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all cursor-pointer">
-              <span className="text-white font-bold">FB</span>
-            </div>
+
           </div>
         </div>
 
@@ -33,11 +48,11 @@ export default function Footer() {
         <div>
           <h3 className="text-white font-black mb-6 uppercase text-xs tracking-[0.3em] border-b border-slate-800 pb-2">Secciones</h3>
           <ul className="grid grid-cols-1 gap-3 text-sm font-bold">
-            <li><Link to="/categoria/sociedad" className="hover:text-orange-500 transition-colors">SOCIEDAD</Link></li>
-            <li><Link to="/categoria/deportes" className="hover:text-orange-500 transition-colors">DEPORTES</Link></li>
-            <li><Link to="/categoria/sucesos" className="hover:text-orange-500 transition-colors">SUCESOS</Link></li>
-            <li><Link to="/categoria/turismo" className="hover:text-orange-500 transition-colors">TURISMO</Link></li>
-            <li><Link to="/categoria/carlos-paz" className="hover:text-orange-500 transition-colors">VILLA CARLOS PAZ</Link></li>
+            <li><Link to="/?categoria=Sociedad" className="hover:text-orange-500 transition-colors">SOCIEDAD</Link></li>
+            <li><Link to="/?categoria=Deportes" className="hover:text-orange-500 transition-colors">DEPORTES</Link></li>
+            <li><Link to="/?categoria=Sucesos" className="hover:text-orange-500 transition-colors">SUCESOS</Link></li>
+            <li><Link to="/?categoria=Turismo" className="hover:text-orange-500 transition-colors">TURISMO</Link></li>
+            <li><Link to="/?categoria=Villa Carlos Paz" className="hover:text-orange-500 transition-colors">VILLA CARLOS PAZ</Link></li>
           </ul>
         </div>
 

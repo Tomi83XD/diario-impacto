@@ -23,7 +23,6 @@ export default function Navbar() {
         
         setClima({
           temp: Math.round(data.current_weather.temperature),
-          // Dejo solo el sol/nube acá porque es un icono funcional del clima, no decorativo
           icon: data.current_weather.temperature > 20 ? '☀️' : '☁️' 
         });
       } catch (error) {
@@ -73,12 +72,13 @@ export default function Navbar() {
           <div className="w-8"></div>
         </div>
 
+        {/* MENÚ SUPERIOR ESCRITORIO CON LINKS FUNCIONALES */}
         <nav className="bg-slate-900 text-gray-200 text-[11px] font-black uppercase tracking-[0.15em] overflow-x-auto hidden sm:block">
           <ul className="flex items-center md:justify-center gap-8 px-4 py-4 md:px-8 min-w-max">
             <li><Link to="/" className="hover:text-orange-500 transition-colors">Inicio</Link></li>
             {categorias.slice(0, 6).map(cat => (
               <li key={cat}>
-                <Link to="/" className="hover:text-orange-500 transition-colors">{cat}</Link>
+                <Link to={`/?categoria=${cat}`} className="hover:text-orange-500 transition-colors">{cat}</Link>
               </li>
             ))}
           </ul>
@@ -95,7 +95,6 @@ export default function Navbar() {
       )}
 
       {/* MENÚ LATERAL */}
-      {/* Las clases [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ocultan la barra */}
       <div 
         className={`fixed top-0 left-0 h-full w-[85%] max-w-sm bg-slate-900 text-white z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] border-r-[6px] border-orange-600 shadow-2xl ${
           menuAbierto ? 'translate-x-0' : '-translate-x-full'
@@ -104,9 +103,9 @@ export default function Navbar() {
         <div className="p-6">
           
           <div className="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-            <span className="text-2xl font-black font-serif italic text-white tracking-tighter">
+            <Link to="/" onClick={() => setMenuAbierto(false)} className="text-2xl font-black font-serif italic text-white tracking-tighter hover:text-orange-100 transition-colors">
               IMPACTO<span className="text-orange-600">.</span>
-            </span>
+            </Link>
             <button 
               onClick={() => setMenuAbierto(false)} 
               className="p-2 bg-slate-800 rounded-full text-gray-400 hover:text-white hover:bg-red-500 transition-all"
@@ -117,6 +116,7 @@ export default function Navbar() {
             </button>
           </div>
 
+          {/* SECCIONES FUNCIONALES */}
           <div className="mb-8">
             <h3 className="text-orange-500 text-xs font-bold uppercase tracking-widest mb-4">Secciones</h3>
             <ul className="space-y-4 font-medium text-lg">
@@ -127,7 +127,7 @@ export default function Navbar() {
               </li>
               {categorias.map(cat => (
                 <li key={cat}>
-                  <Link to="/" onClick={() => setMenuAbierto(false)} className="hover:text-orange-400 transition-colors block">
+                  <Link to={`/?categoria=${cat}`} onClick={() => setMenuAbierto(false)} className="hover:text-orange-400 transition-colors block">
                     {cat}
                   </Link>
                 </li>
@@ -135,33 +135,52 @@ export default function Navbar() {
             </ul>
           </div>
 
+          {/* INSTITUCIONAL LIMPIO (SIN ADMIN) */}
           <div className="mb-8 pt-6 border-t border-slate-800">
             <h3 className="text-orange-500 text-xs font-bold uppercase tracking-widest mb-4">Institucional</h3>
             <ul className="space-y-4 text-sm text-gray-300">
               <li>
-                <Link to="/" onClick={() => setMenuAbierto(false)} className="hover:text-white transition-colors">
+                <Link to="/contacto" onClick={() => setMenuAbierto(false)} className="hover:text-white transition-colors block">
                   Contacto
                 </Link>
               </li>
               <li>
-                <Link to="/" onClick={() => setMenuAbierto(false)} className="hover:text-white transition-colors">
+                <Link to="/publicidad" onClick={() => setMenuAbierto(false)} className="hover:text-white transition-colors block">
                   Publicidad
-                </Link>
-              </li>
-              <li>
-                <Link to="/admin" onClick={() => setMenuAbierto(false)} className="hover:text-orange-400 font-bold transition-colors">
-                  Acceso Redacción
                 </Link>
               </li>
             </ul>
           </div>
 
+          {/* REDES SOCIALES */}
           <div className="pt-6 border-t border-slate-800">
             <p className="text-xs text-gray-500 mb-3">Redes sociales:</p>
             <div className="flex gap-4">
-              <a href="https://www.instagram.com/diarioelimpacto" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors font-bold text-sm">IG</a>
-              <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors font-bold text-sm cursor-pointer">FB</div>
-              <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-sky-500 transition-colors font-bold text-sm cursor-pointer">X</div>
+              <a 
+              href="https://www.instagram.com/diarioelimpacto" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label="Instagram de Diario Impacto"
+              className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-orange-600 transition-all group"
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="20" 
+                height="20" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className="text-white group-hover:scale-110 transition-transform"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+              
             </div>
           </div>
 
