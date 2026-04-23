@@ -451,6 +451,7 @@ export default function AdminPanel() {
                   <option value="Cultura">Cultura</option>
                   <option value="Tecnología">Tecnología</option>
                   <option value="Salud">Salud</option>
+                  <option value="Mundo">Mundo</option>
                 </select>
               </div>
               <div>
@@ -823,6 +824,7 @@ export default function AdminPanel() {
                     <option value="Cultura">Cultura</option>
                     <option value="Tecnología">Tecnología</option>
                     <option value="Salud">Salud</option>
+                    <option value="Mundo">Mundo</option>
                   </select>
                 </div>
                 <div>

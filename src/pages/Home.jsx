@@ -213,27 +213,36 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       
       {ultimoMomento.length > 0 && (
-        <div className="bg-red-600 text-white py-2">
-          <div className="max-w-7xl mx-auto px-4 flex items-center gap-4 overflow-hidden">
-            <span className="bg-white text-red-600 text-xs font-bold px-2 py-1 rounded uppercase flex-shrink-0">
+        <div className="bg-red-600 text-white py-2 overflow-hidden border-b border-red-700">
+          <div className="max-w-7xl mx-auto px-4 flex items-center gap-4">
+            <span className="bg-white text-red-600 text-xs font-bold px-2 py-1 rounded uppercase flex-shrink-0 z-10 shadow-sm">
               🔴 Último Momento
             </span>
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 overflow-hidden relative">
               <motion.div 
-                className="flex gap-8 whitespace-nowrap"
-                animate={{ x: ['0%', '-50%'] }}
-                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+                className="flex gap-12 whitespace-nowrap"
+                animate={{ x: ['0%', '-100%'] }} // Cambiamos a -100% para que sea fluido
+                transition={{ 
+                  duration: 40, // Podés subirlo si va muy rápido
+                  repeat: Infinity, 
+                  ease: 'linear' 
+                }}
               >
-                {[...ultimoMomento, ...ultimoMomento].map((noticia, i) => (
-                  <Link key={`${noticia.id}-${i}`} to={`/noticia/${noticia.id}`} className="text-sm hover:underline">
-                    {noticia.titulo}
+                {/* Duplicamos la lista 4 veces para asegurar que siempre haya texto llenando el ancho */}
+                {[...ultimoMomento, ...ultimoMomento, ...ultimoMomento, ...ultimoMomento].map((noticia, i) => (
+                  <Link 
+                    key={`${noticia.id}-${i}`}
+                    to={`/noticia/${noticia.id}`}
+                    className="text-sm font-bold hover:underline inline-flex items-center"
+                  >
+                    <span className="mr-4">|</span> {noticia.titulo}
                   </Link>
                 ))}
               </motion.div>
             </div>
           </div>
         </div>
-      )}
+      )}    
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         

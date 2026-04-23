@@ -38,7 +38,20 @@ export default function Navbar() {
   const fechaFormateada = fechaHora.toLocaleDateString('es-AR', opcionesFecha);
   const horaFormateada = fechaHora.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
 
-  const categorias = ['Sociedad', 'Política', 'Deportes', 'Sucesos', 'Turismo', 'Economía', 'Cultura', 'Villa Carlos Paz'];
+  // LISTA COMPLETA Y SINCRONIZADA CON EL ADMIN
+  const categorias = [
+    'Sociedad', 
+    'Deportes', 
+    'Sucesos', 
+    'Política', 
+    'Economía', 
+    'Turismo', 
+    'Villa Carlos Paz', 
+    'Cultura', 
+    'Tecnología', 
+    'Salud',
+    'Mundo'
+  ];
 
   return (
     <>
@@ -63,8 +76,8 @@ export default function Navbar() {
               <span className="hidden md:inline opacity-50">•</span>
               <span className="bg-white text-orange-600 px-2 py-0.5 rounded-sm">{horaFormateada}</span>
               <span className="opacity-50">•</span>
-              <span className="text-white flex items-center gap-1">
-                 V. CARLOS PAZ {clima.icon} {clima.temp}°C
+              <span className="text-white flex items-center gap-1 uppercase">
+                 V. Carlos Paz {clima.icon} {clima.temp}°C
               </span>
             </div>
           </div>
@@ -72,13 +85,13 @@ export default function Navbar() {
           <div className="w-8"></div>
         </div>
 
-        {/* MENÚ SUPERIOR ESCRITORIO CON LINKS FUNCIONALES */}
-        <nav className="bg-slate-900 text-gray-200 text-[11px] font-black uppercase tracking-[0.15em] overflow-x-auto hidden sm:block">
-          <ul className="flex items-center md:justify-center gap-8 px-4 py-4 md:px-8 min-w-max">
+        {/* NAVEGACIÓN SUPERIOR: Ahora muestra todas las categorías */}
+        <nav className="bg-slate-900 text-gray-200 text-[11px] font-black uppercase tracking-[0.15em] overflow-x-auto no-scrollbar">
+          <ul className="flex items-center md:justify-center gap-6 px-6 py-4 min-w-max">
             <li><Link to="/" className="hover:text-orange-500 transition-colors">Inicio</Link></li>
-            {categorias.slice(0, 6).map(cat => (
+            {categorias.map(cat => (
               <li key={cat}>
-                <Link to={`/?categoria=${cat}`} className="hover:text-orange-500 transition-colors">{cat}</Link>
+                <Link to={`/?categoria=${cat}`} className="hover:text-orange-500 transition-colors whitespace-nowrap">{cat}</Link>
               </li>
             ))}
           </ul>
@@ -94,9 +107,9 @@ export default function Navbar() {
         ></div>
       )}
 
-      {/* MENÚ LATERAL */}
+      {/* MENÚ LATERAL (Sidebar) */}
       <div 
-        className={`fixed top-0 left-0 h-full w-[85%] max-w-sm bg-slate-900 text-white z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] border-r-[6px] border-orange-600 shadow-2xl ${
+        className={`fixed top-0 left-0 h-full w-[85%] max-w-sm bg-slate-900 text-white z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto border-r-[6px] border-orange-600 shadow-2xl ${
           menuAbierto ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -116,15 +129,10 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* SECCIONES FUNCIONALES */}
           <div className="mb-8">
             <h3 className="text-orange-500 text-xs font-bold uppercase tracking-widest mb-4">Secciones</h3>
             <ul className="space-y-4 font-medium text-lg">
-              <li>
-                <Link to="/" onClick={() => setMenuAbierto(false)} className="hover:text-orange-400 transition-colors block">
-                  Inicio
-                </Link>
-              </li>
+              <li><Link to="/" onClick={() => setMenuAbierto(false)} className="hover:text-orange-400 transition-colors block">Inicio</Link></li>
               {categorias.map(cat => (
                 <li key={cat}>
                   <Link to={`/?categoria=${cat}`} onClick={() => setMenuAbierto(false)} className="hover:text-orange-400 transition-colors block">
@@ -135,52 +143,21 @@ export default function Navbar() {
             </ul>
           </div>
 
-          {/* INSTITUCIONAL LIMPIO (SIN ADMIN) */}
           <div className="mb-8 pt-6 border-t border-slate-800">
             <h3 className="text-orange-500 text-xs font-bold uppercase tracking-widest mb-4">Institucional</h3>
             <ul className="space-y-4 text-sm text-gray-300">
-              <li>
-                <Link to="/contacto" onClick={() => setMenuAbierto(false)} className="hover:text-white transition-colors block">
-                  Contacto
-                </Link>
-              </li>
-              <li>
-                <Link to="/publicidad" onClick={() => setMenuAbierto(false)} className="hover:text-white transition-colors block">
-                  Publicidad
-                </Link>
-              </li>
+              <li><Link to="/contacto" onClick={() => setMenuAbierto(false)} className="hover:text-white transition-colors block">Contacto</Link></li>
+              <li><Link to="/publicidad" onClick={() => setMenuAbierto(false)} className="hover:text-white transition-colors block">Publicidad</Link></li>
             </ul>
           </div>
 
           {/* REDES SOCIALES */}
           <div className="pt-6 border-t border-slate-800">
-            <p className="text-xs text-gray-500 mb-3">Redes sociales:</p>
+            <p className="text-xs text-gray-500 mb-3">Seguinos:</p>
             <div className="flex gap-4">
-              <a 
-              href="https://www.instagram.com/diarioelimpacto" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              aria-label="Instagram de Diario Impacto"
-              className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-orange-600 transition-all group"
-            >
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="20" 
-                height="20" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                className="text-white group-hover:scale-110 transition-transform"
-              >
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-              </svg>
-            </a>
-              
+              <a href="https://www.instagram.com/diarioelimpacto" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-orange-600 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              </a>
             </div>
           </div>
 
